@@ -1,0 +1,155 @@
+/* ============================================================
+   CLIMORA — Design Tokens
+   A living atmosphere, not a dashboard.
+   ============================================================ */
+
+:root {
+  /* Type */
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", monospace;
+
+  /* Base neutrals (dark, default) */
+  --bg-base: #0a0d12;
+  --bg-raised: #10141b;
+  --bg-glass: rgba(255, 255, 255, 0.045);
+  --bg-glass-strong: rgba(255, 255, 255, 0.08);
+  --border-hairline: rgba(255, 255, 255, 0.09);
+  --border-hairline-strong: rgba(255, 255, 255, 0.16);
+
+  --text-primary: #f5f3ee;
+  --text-secondary: #b7bdc9;
+  --text-muted: #737b8c;
+
+  /* Weather accent pair — repainted by JS per condition */
+  --accent-1: #ffb35a;
+  --accent-2: #ff7a59;
+  --accent-1-rgb: 255, 179, 90;
+  --accent-2-rgb: 255, 122, 89;
+
+  /* Shadows & glow */
+  --shadow-soft: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
+  --shadow-lift: 0 30px 80px -25px rgba(0, 0, 0, 0.7);
+  --glow-accent: 0 0 60px -10px rgba(var(--accent-1-rgb), 0.35);
+
+  /* Radius & rhythm */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 7rem;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 180ms;
+  --dur-med: 420ms;
+  --dur-slow: 900ms;
+}
+
+/* ---------- Light mode ---------- */
+[data-theme="light"] {
+  --bg-base: #f4f5f3;
+  --bg-raised: #ffffff;
+  --bg-glass: rgba(10, 13, 18, 0.035);
+  --bg-glass-strong: rgba(10, 13, 18, 0.06);
+  --border-hairline: rgba(10, 13, 18, 0.08);
+  --border-hairline-strong: rgba(10, 13, 18, 0.14);
+
+  --text-primary: #14171c;
+  --text-secondary: #4b5160;
+  --text-muted: #868d9b;
+
+  --shadow-soft: 0 20px 50px -25px rgba(20, 23, 28, 0.25);
+  --shadow-lift: 0 30px 70px -25px rgba(20, 23, 28, 0.3);
+}
+
+/* ---------- Weather-condition accent palettes ----------
+   Applied to [data-weather] on <html> by animations.js
+   These are read as fallbacks; JS interpolates live values,
+   but the base pairs live here as the single source of truth. */
+[data-weather="clear-day"] {
+  --accent-1: #ffb35a;
+  --accent-2: #ff7a59;
+  --accent-1-rgb: 255, 179, 90;
+  --accent-2-rgb: 255, 122, 89;
+}
+[data-weather="clear-night"] {
+  --accent-1: #7b86ff;
+  --accent-2: #34215e;
+  --accent-1-rgb: 123, 134, 255;
+  --accent-2-rgb: 52, 33, 94;
+}
+[data-weather="cloudy"] {
+  --accent-1: #a7b0c2;
+  --accent-2: #5c6479;
+  --accent-1-rgb: 167, 176, 194;
+  --accent-2-rgb: 92, 100, 121;
+}
+[data-weather="rain"] {
+  --accent-1: #58d6ea;
+  --accent-2: #1c4f6e;
+  --accent-1-rgb: 88, 214, 234;
+  --accent-2-rgb: 28, 79, 110;
+}
+[data-weather="thunder"] {
+  --accent-1: #bfa1ff;
+  --accent-2: #241436;
+  --accent-1-rgb: 191, 161, 255;
+  --accent-2-rgb: 36, 20, 54;
+}
+[data-weather="snow"] {
+  --accent-1: #dcefff;
+  --accent-2: #7fa7c9;
+  --accent-1-rgb: 220, 239, 255;
+  --accent-2-rgb: 127, 167, 201;
+}
+[data-weather="fog"] {
+  --accent-1: #d3d8e0;
+  --accent-2: #838b99;
+  --accent-1-rgb: 211, 216, 224;
+  --accent-2-rgb: 131, 139, 153;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+  background: var(--bg-base);
+}
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  transition: background var(--dur-slow) var(--ease-in-out),
+    color var(--dur-med) var(--ease-in-out);
+}
+
+::selection {
+  background: rgba(var(--accent-1-rgb), 0.35);
+  color: var(--text-primary);
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--border-hairline-strong);
+  border-radius: var(--radius-pill);
+}
+
+:focus-visible {
+  outline: 2px solid rgba(var(--accent-1-rgb), 0.8);
+  outline-offset: 3px;
+  border-radius: 6px;
+}

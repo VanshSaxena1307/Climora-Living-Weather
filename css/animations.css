@@ -1,0 +1,86 @@
+/* ============================================================
+   CLIMORA — Keyframes & Micro-interactions
+   ============================================================ */
+
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+@keyframes boot-slide {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(160px); }
+  100% { transform: translateX(-100%); }
+}
+@keyframes cue-bob {
+  0%, 100% { transform: translate(-50%, 0); opacity: 0.5; }
+  50% { transform: translate(-50%, 8px); opacity: 1; }
+}
+@keyframes toast-in {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes toast-out {
+  to { opacity: 0; transform: translateY(10px) scale(0.96); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+@keyframes drift-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-40px); }
+}
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 100% { opacity: 1; }
+  20%, 22% { opacity: 0.4; }
+}
+@keyframes ripple {
+  to { transform: scale(3); opacity: 0; }
+}
+
+/* hero reveal choreography — staged via animation-delay in JS-added class */
+.hero-anim-in .hero-meta { animation: fade-up 900ms var(--ease-out) 100ms forwards; }
+.hero-anim-in .hero-location { animation: fade-up 900ms var(--ease-out) 220ms forwards; }
+.hero-anim-in .hero-temp { animation: fade-up 1100ms var(--ease-out) 320ms forwards; }
+.hero-anim-in .hero-side { animation: fade-up 1000ms var(--ease-out) 480ms forwards; }
+.hero-anim-in .scroll-cue { animation: fade-up 800ms var(--ease-out) 900ms forwards, cue-bob 2.6s ease-in-out 1.7s infinite; }
+
+/* number roll for animated counters */
+.digit { transition: transform 500ms var(--ease-out); }
+
+/* ripple on buttons */
+.ripple-el {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  transform: scale(0);
+  pointer-events: none;
+  animation: ripple 600ms ease-out forwards;
+}
+[data-theme="light"] .ripple-el { background: rgba(0,0,0,0.15); }
+
+/* magnetic buttons handled via inline transform in JS; keep smoothing here */
+.icon-btn, .search-go, .chart-tab, .theme-dropdown button { will-change: transform; }
+
+/* icon float */
+.wicon, .h-icon, .d-icon {
+  animation: float-icon 4.5s ease-in-out infinite;
+}
+@keyframes float-icon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* fade-in page transition on load */
+body.route-ready .section { animation: none; }
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

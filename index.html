@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-weather="clear-day">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Climora — Living Weather</title>
+<meta name="description" content="Climora is a cinematic, living weather experience for any city on Earth." />
+<meta name="theme-color" content="#0a0d12" />
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="favicon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/themes.css" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/animations.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+<!-- Boot loader -->
+<div id="app-loading" aria-hidden="true">
+  <div class="boot-mark">
+    <span class="boot-word">Climora</span>
+    <div class="boot-bar"><div class="boot-bar-fill"></div></div>
+  </div>
+</div>
+
+<div id="scroll-progress"></div>
+<div id="cursor-glow"></div>
+<div id="toast-root" aria-live="polite"></div>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="brand"><span class="brand-dot"></span><span class="brand-word">Climora</span></div>
+
+  <form id="search-form" class="search-shell" role="search">
+    <div class="search-box">
+      <span aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      </span>
+      <input id="search-input" type="text" placeholder="Search any city on Earth…" autocomplete="off" aria-label="Search for a city" />
+      <button type="submit" class="search-go" data-ripple>Go</button>
+    </div>
+    <div id="search-panel" class="search-panel" role="listbox"></div>
+  </form>
+  
+  <div class="topbar-actions">
+    <button id="unit-btn" class="icon-btn" title="Toggle °C/°F" aria-label="Toggle temperature unit" data-ripple>°C</button>
+    <button id="locate-btn" class="icon-btn" title="Use my location" aria-label="Use my current location" data-ripple>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- Hero -->
+<section id="hero" class="hero">
+  <canvas id="sky-canvas"></canvas>
+  <div class="hero-scrim"></div>
+
+  <div class="wrap hero-inner">
+    <div class="hero-meta">
+      <span id="hero-clock">--:--</span>
+      <span class="dot-sep">·</span>
+      <span id="hero-date">Loading date…</span>
+    </div>
+
+    <div class="hero-location">
+      <span id="hero-city">Locating you…</span>
+      <span id="hero-country" class="country"></span>
+    </div>
+
+    <div class="hero-temp-row">
+      <div class="hero-temp"><span id="hero-temp-value" data-raw="0">--</span><span class="deg">°</span></div>
+      <div class="hero-side">
+        <div class="hero-desc"><span id="hero-icon" class="wicon"></span><span id="hero-desc-text">—</span></div>
+        <div id="hero-feels" class="hero-feels">Feels like --°</div>
+        <div class="hero-hilo">
+          <span>H: <b id="hero-hi">--°</b></span>
+          <span>L: <b id="hero-lo">--°</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+</section>
+
+<main class="wrap">
+
+  <!-- Hourly -->
+  <section class="section" id="hourly-section">
+    <div class="section-head">
+      <h2 class="section-title">Next 24 Hours</h2>
+      <span class="section-sub">Hourly forecast</span>
+    </div>
+    <div id="hourly-rail" class="hourly-rail"></div>
+  </section>
+
+  <!-- 7 day -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">This Week</h2>
+      <span class="section-sub">7-day outlook</span>
+    </div>
+    <div id="day-grid" class="day-grid"></div>
+  </section>
+
+  <!-- Bento metrics -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Right Now</h2>
+      <span class="section-sub">Live conditions</span>
+    </div>
+    <div id="bento-grid" class="bento"></div>
+  </section>
+
+  <!-- Quote strip -->
+  <section class="quote-strip">
+    <blockquote id="quote-text">"…"</blockquote>
+    <cite id="quote-cite"></cite>
+  </section>
+
+  <footer class="footer">
+    <span>Data by Open-Meteo · Built with Climora</span>
+    <div class="footer-actions">
+      <button id="download-btn" class="icon-btn" title="Download weather card" aria-label="Download weather card" data-ripple>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>
+      </button>
+      <button id="share-btn" class="icon-btn" title="Share weather card" aria-label="Share weather card" data-ripple>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-3.8M8.6 13.4l6.8 3.8"/></svg>
+      </button>
+    </div>
+  </footer>
+</main>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
