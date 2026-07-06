@@ -186,7 +186,10 @@ function sunArcProgress(sunriseIso, sunsetIso) {
 
 function sunArcSvg(progress) {
   const w = 260, h = 64;
-  const cx = w / 2, cy = h + 6, r = 90;
+  // r must stay small enough that the apex (cy - r) doesn't go negative —
+  // the svg uses overflow:visible so anything above y=0 draws outside the
+  // wrap and overlaps the "SUNRISE & SUNSET" label sitting above it.
+  const cx = w / 2, cy = h + 6, r = 58;
   const angle = Math.PI - progress * Math.PI;
   const dotX = cx + r * Math.cos(angle);
   const dotY = cy - r * Math.sin(angle);
