@@ -51,8 +51,21 @@
   .hero-side { padding-top: 0; }
   .hero-hilo { flex-wrap: wrap; }
 
+  /* The "Scroll" cue is absolutely positioned from the bottom of .hero.
+     On short mobile viewports .hero shrinks to fit its content, so the
+     cue's box (line + label) no longer fits inside the padding-bottom
+     reserved for it and ends up drawn on top of the H/L row above it.
+     Touch users don't need a scroll hint anyway, so just hide it. */
+  .scroll-cue { display: none; }
+
   .section { padding: var(--space-4) 0; }
-  .section-head { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .section-head { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: calc(var(--space-3) + 8px); }
+
+  /* Search input lives in the bottom-pinned nav bar on mobile, so the
+     results panel has to open upward — the default "top: 100%" would
+     render it below the viewport, i.e. invisible/unusable. */
+  .search-panel { top: auto; bottom: calc(100% + 10px); transform: translateY(8px); }
+  .search-panel.open { transform: translateY(0); }
 
   .day-grid { grid-template-columns: repeat(3, 1fr); }
   .day-card:nth-child(n+4) { display: flex; }
